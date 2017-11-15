@@ -64,13 +64,13 @@
 				<key>Class Name</key>
 				<string>AMGetSelectedFinderItemsAction</string>
 				<key>InputUUID</key>
-				<string>ACB20285-0087-4D03-9069-F90C451929CA</string>
+				<string>C39942A4-E3EB-4BEA-83CC-8EFD7B5B6D36</string>
 				<key>Keywords</key>
 				<array/>
 				<key>OutputUUID</key>
-				<string>CFEF10A0-8C7A-4773-8D33-1B29DE334F15</string>
+				<string>38006A1A-FAD8-4F63-8BF9-FB1E791B4DFF</string>
 				<key>UUID</key>
-				<string>925099E9-4913-411E-A827-D791AC759888</string>
+				<string>6998C620-7CF2-48B0-B1E6-2688F6EBE5D1</string>
 				<key>UnlocalizedApplications</key>
 				<array>
 					<string>Finder</string>
@@ -131,11 +131,13 @@
 				<dict>
 					<key>COMMAND_STRING</key>
 					<string>osascript -e 'display notification "Uploading to ScreenShottr" with title "ScreenShottr"'
+Username=$(cat ~/Library/Application\ Support/com.screenshottr.screenshottr/Username)
+Token=$(cat ~/Library/Application\ Support/com.screenshottr.screenshottr/Token)
 
 for thisImage in "$@"
 do
     export PYTHONIOENCODING=utf8
-    GetSignedAPI=$(curl -s 'https://n7ekt931q0.execute-api.eu-west-1.amazonaws.com/dev/api/getSignedS3URL')
+    GetSignedAPI=$(curl -s "https://zbc818jkr9.execute-api.eu-west-1.amazonaws.com/dev/api/getSignedS3URL?user_name=$Username&amp;token=$Token")
 
     success=$(echo $GetSignedAPI | python -c "import sys, json; print json.load(sys.stdin)['success']")
 
@@ -146,17 +148,16 @@ do
       exit
     fi
 
-    curl -X PUT -T "$thisImage" "$signedUrl" -H "Content-Type: binary/octet-stream"
-
-
-    metaData=$(curl -s "https://n7ekt931q0.execute-api.eu-west-1.amazonaws.com/dev/api/getImageMetadata?image_id=$key")
+    upload=$(curl -X PUT -T "$thisImage" "$signedUrl" -H "Content-Type: binary/octet-stream")
+	rm -f "$thisImage"
+    metaData=$(curl -s "https://zbc818jkr9.execute-api.eu-west-1.amazonaws.com/dev/api/getImageMetadata?image_id=$key")
     uploadStatus=$(echo $metaData | python -c "import sys, json; print json.load(sys.stdin)['response']['data']['Item']['image_status']")
 
     for i in {1..10};
     do
       if [ "$uploadStatus" = "not_yet_uploaded" ]
       then
-        metaData=$(curl -s "https://n7ekt931q0.execute-api.eu-west-1.amazonaws.com/dev/api/getImageMetadata?image_id=$key")
+        metaData=$(curl -s "https://zbc818jkr9.execute-api.eu-west-1.amazonaws.com/dev/api/getImageMetadata?image_id=$key")
         uploadStatus=$(echo $metaData | python -c "import sys, json; print json.load(sys.stdin)['response']['data']['Item']['image_status']")
         sleep 0
       elif [ "$uploadStatus" = "image_uploaded" ]
@@ -169,8 +170,7 @@ do
       fi
     done
     echo $ScreenShottrURL
-done
-</string>
+done</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
@@ -280,12 +280,10 @@ done
 						<string>4</string>
 					</dict>
 				</dict>
-				<key>conversionLabel</key>
-				<integer>0</integer>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>769.000000:499.000000</string>
+				<string>769.000000:319.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
@@ -365,104 +363,22 @@ done
 				</array>
 				<key>arguments</key>
 				<dict/>
-				<key>conversionLabel</key>
-				<integer>0</integer>
-			</dict>
-		</dict>
-		<dict>
-			<key>action</key>
-			<dict>
-				<key>AMAccepts</key>
-				<dict>
-					<key>Container</key>
-					<string>List</string>
-					<key>Optional</key>
-					<false/>
-					<key>Types</key>
-					<array>
-						<string>com.apple.cocoa.attributed-string</string>
-					</array>
-				</dict>
-				<key>AMActionVersion</key>
-				<string>1.2.1</string>
-				<key>AMApplication</key>
-				<array>
-					<string>System</string>
-				</array>
-				<key>AMParameterProperties</key>
-				<dict/>
-				<key>AMProvides</key>
-				<dict>
-					<key>Container</key>
-					<string>List</string>
-					<key>Optional</key>
-					<false/>
-					<key>Types</key>
-					<array>
-						<string>com.apple.cocoa.attributed-string</string>
-					</array>
-				</dict>
-				<key>ActionBundlePath</key>
-				<string>/System/Library/Automator/Copy to Clipboard.action</string>
-				<key>ActionName</key>
-				<string>Copy to Clipboard</string>
-				<key>ActionParameters</key>
-				<dict/>
-				<key>BundleIdentifier</key>
-				<string>com.apple.Automator.CopyToClipboard</string>
-				<key>CFBundleVersion</key>
-				<string>1.2.1</string>
-				<key>CanShowSelectedItemsWhenRun</key>
-				<true/>
-				<key>CanShowWhenRun</key>
-				<false/>
-				<key>Category</key>
-				<array>
-					<string>AMCategoryUtilities</string>
-				</array>
-				<key>Class Name</key>
-				<string>AMCopyToClipboardAction</string>
-				<key>InputUUID</key>
-				<string>FCCDA2B7-6492-43B3-9479-774F94240CCC</string>
-				<key>Keywords</key>
-				<array>
-					<string>Copy</string>
-				</array>
-				<key>OutputUUID</key>
-				<string>973E22EC-CFB8-442F-8340-C312C9E98E0A</string>
-				<key>UUID</key>
-				<string>3F3AE0A3-13C2-4FBC-AC71-07ACF80CA090</string>
-				<key>UnlocalizedApplications</key>
-				<array>
-					<string>System</string>
-				</array>
-				<key>arguments</key>
-				<dict/>
-				<key>conversionLabel</key>
-				<integer>0</integer>
 			</dict>
 		</dict>
 	</array>
 	<key>connectors</key>
 	<dict>
-		<key>8E6CDB52-AD63-480B-A84D-8B50B8614610</key>
+		<key>47502F7E-F4AF-4AF4-9B36-0A8CAF1D4316</key>
 		<dict>
 			<key>from</key>
 			<string>DC3ECD3D-FE22-4C53-8CB1-7BD3569A4E77 - DC3ECD3D-FE22-4C53-8CB1-7BD3569A4E77</string>
 			<key>to</key>
 			<string>C2D84798-4F0B-443A-B73C-1F518205981D - C2D84798-4F0B-443A-B73C-1F518205981D</string>
 		</dict>
-		<key>90D1DE6E-4333-4D82-8884-B780C1C4B2F9</key>
+		<key>956FA42E-1E9F-4A5D-92FA-ECD3EBEBD924</key>
 		<dict>
 			<key>from</key>
-			<string>C2D84798-4F0B-443A-B73C-1F518205981D - C2D84798-4F0B-443A-B73C-1F518205981D</string>
-			<key>to</key>
-			<string>3F3AE0A3-13C2-4FBC-AC71-07ACF80CA090 - 3F3AE0A3-13C2-4FBC-AC71-07ACF80CA090</string>
-		</dict>
-		<key>E3CE7A89-C637-4BB8-A419-3F9BA39EB4C6</key>
-		<dict>
-			<key>from</key>
-			<string>925099E9-4913-411E-A827-D791AC759888 - 925099E9-4913-411E-A827-D791AC759888</string>
+			<string>6998C620-7CF2-48B0-B1E6-2688F6EBE5D1 - 6998C620-7CF2-48B0-B1E6-2688F6EBE5D1</string>
 			<key>to</key>
 			<string>DC3ECD3D-FE22-4C53-8CB1-7BD3569A4E77 - DC3ECD3D-FE22-4C53-8CB1-7BD3569A4E77</string>
 		</dict>
@@ -470,7 +386,7 @@ done
 	<key>workflowMetaData</key>
 	<dict>
 		<key>folderActionFolderPath</key>
-		<string>~/Library/Mobile Documents/com~apple~CloudDocs/Pictures/Screenshots</string>
+		<string>~/Library/Application Support/com.screenshottr.screenshottr/screenshots</string>
 		<key>workflowTypeIdentifier</key>
 		<string>com.apple.Automator.folderAction</string>
 	</dict>
