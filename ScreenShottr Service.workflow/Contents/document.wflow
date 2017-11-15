@@ -131,41 +131,46 @@
 				<dict>
 					<key>COMMAND_STRING</key>
 					<string>osascript -e 'display notification "Uploading to ScreenShottr" with title "ScreenShottr"'
-export PYTHONIOENCODING=utf8
-GetSignedAPI=$(curl -s 'https://n7ekt931q0.execute-api.eu-west-1.amazonaws.com/dev/api/getSignedS3URL')
 
-success=$(echo $GetSignedAPI | python -c "import sys, json; print json.load(sys.stdin)['success']")
-
-if $success; then
-  signedUrl=$(echo $GetSignedAPI | python -c "import sys, json; print json.load(sys.stdin)['response']['signedUrl']")
-  key=$(echo $GetSignedAPI | python -c "import sys, json; print json.load(sys.stdin)['response']['key']")
-else
-  exit
-fi
-
-curl -X PUT -T "$1" "$signedUrl" -H "Content-Type: binary/octet-stream"
-
-
-metaData=$(curl -s "https://n7ekt931q0.execute-api.eu-west-1.amazonaws.com/dev/api/getImageMetadata?image_id=$key")
-uploadStatus=$(echo $metaData | python -c "import sys, json; print json.load(sys.stdin)['response']['data']['Item']['image_status']")
-
-for i in {1..10};
+for thisImage in "$@"
 do
-  if [ "$uploadStatus" = "not_yet_uploaded" ]
-  then
+    export PYTHONIOENCODING=utf8
+    GetSignedAPI=$(curl -s 'https://n7ekt931q0.execute-api.eu-west-1.amazonaws.com/dev/api/getSignedS3URL')
+
+    success=$(echo $GetSignedAPI | python -c "import sys, json; print json.load(sys.stdin)['success']")
+
+    if $success; then
+      signedUrl=$(echo $GetSignedAPI | python -c "import sys, json; print json.load(sys.stdin)['response']['signedUrl']")
+      key=$(echo $GetSignedAPI | python -c "import sys, json; print json.load(sys.stdin)['response']['key']")
+    else
+      exit
+    fi
+
+    curl -X PUT -T "$thisImage" "$signedUrl" -H "Content-Type: binary/octet-stream"
+
+
     metaData=$(curl -s "https://n7ekt931q0.execute-api.eu-west-1.amazonaws.com/dev/api/getImageMetadata?image_id=$key")
     uploadStatus=$(echo $metaData | python -c "import sys, json; print json.load(sys.stdin)['response']['data']['Item']['image_status']")
-    sleep 0
-  elif [ "$uploadStatus" = "image_uploaded" ]
-  then
-    ScreenShottrURL=$(echo $metaData | python -c "import sys, json; print json.load(sys.stdin)['response']['data']['Item']['image_url']")
-    break
-  else
-    osascript -e 'display notification "ScreenShottr Upload Failed" with title "ScreenShottr"'
-    exit
-  fi
+
+    for i in {1..10};
+    do
+      if [ "$uploadStatus" = "not_yet_uploaded" ]
+      then
+        metaData=$(curl -s "https://n7ekt931q0.execute-api.eu-west-1.amazonaws.com/dev/api/getImageMetadata?image_id=$key")
+        uploadStatus=$(echo $metaData | python -c "import sys, json; print json.load(sys.stdin)['response']['data']['Item']['image_status']")
+        sleep 0
+      elif [ "$uploadStatus" = "image_uploaded" ]
+      then
+        ScreenShottrURL=$(echo $metaData | python -c "import sys, json; print json.load(sys.stdin)['response']['data']['Item']['image_url']")
+        break
+      else
+        osascript -e 'display notification "ScreenShottr Upload Failed" with title "ScreenShottr"'
+        exit
+      fi
+    done
+    echo $ScreenShottrURL
 done
-echo $ScreenShottrURL</string>
+</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
