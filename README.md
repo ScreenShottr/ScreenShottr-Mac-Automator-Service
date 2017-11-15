@@ -4,7 +4,9 @@ Installation
 
 
 ```
-git clone
+git clone https://github.com/ScreenShottr/ScreenShottr-Mac-Automator-Service
+cd ScreenShottr-Mac-Automator-Service
+chmod +x install.sh
+./install.sh
 ```
 
-Open the workspace in Automator, using the "Folder Action Receives... select the location where your macOS screenshots are set to go to."
