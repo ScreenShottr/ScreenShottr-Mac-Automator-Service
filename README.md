@@ -1,0 +1,1 @@
+# ScreenShottr-Mac-Automator-Service
