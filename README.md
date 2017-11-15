@@ -1,7 +1,8 @@
 # ScreenShottr-Mac-Automator-Service
 
-Installation
+Automatically Upload your Mac Screenshots to ScreenShottr
 
+Installation
 
 ```
 git clone https://github.com/ScreenShottr/ScreenShottr-Mac-Automator-Service
