@@ -77,8 +77,6 @@
 				</array>
 				<key>arguments</key>
 				<dict/>
-				<key>conversionLabel</key>
-				<integer>0</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -149,7 +147,9 @@ do
     fi
 
     upload=$(curl -X PUT -T "$thisImage" "$signedUrl" -H "Content-Type: binary/octet-stream")
-	rm -f "$thisImage"
+    rm -f "$thisImage"
+
+
     metaData=$(curl -s "https://zbc818jkr9.execute-api.eu-west-1.amazonaws.com/dev/api/getImageMetadata?image_id=$key")
     uploadStatus=$(echo $metaData | python -c "import sys, json; print json.load(sys.stdin)['response']['data']['Item']['image_status']")
 
@@ -169,8 +169,8 @@ do
         exit
       fi
     done
-    echo $ScreenShottrURL
-done</string>
+done
+</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
@@ -368,19 +368,19 @@ done</string>
 	</array>
 	<key>connectors</key>
 	<dict>
-		<key>47502F7E-F4AF-4AF4-9B36-0A8CAF1D4316</key>
-		<dict>
-			<key>from</key>
-			<string>DC3ECD3D-FE22-4C53-8CB1-7BD3569A4E77 - DC3ECD3D-FE22-4C53-8CB1-7BD3569A4E77</string>
-			<key>to</key>
-			<string>C2D84798-4F0B-443A-B73C-1F518205981D - C2D84798-4F0B-443A-B73C-1F518205981D</string>
-		</dict>
-		<key>956FA42E-1E9F-4A5D-92FA-ECD3EBEBD924</key>
+		<key>B6EDD1BD-4BF3-48CC-B4FA-C16A84351381</key>
 		<dict>
 			<key>from</key>
 			<string>6998C620-7CF2-48B0-B1E6-2688F6EBE5D1 - 6998C620-7CF2-48B0-B1E6-2688F6EBE5D1</string>
 			<key>to</key>
 			<string>DC3ECD3D-FE22-4C53-8CB1-7BD3569A4E77 - DC3ECD3D-FE22-4C53-8CB1-7BD3569A4E77</string>
+		</dict>
+		<key>E20E507A-FAAE-4C47-9598-44855C59C62F</key>
+		<dict>
+			<key>from</key>
+			<string>DC3ECD3D-FE22-4C53-8CB1-7BD3569A4E77 - DC3ECD3D-FE22-4C53-8CB1-7BD3569A4E77</string>
+			<key>to</key>
+			<string>C2D84798-4F0B-443A-B73C-1F518205981D - C2D84798-4F0B-443A-B73C-1F518205981D</string>
 		</dict>
 	</dict>
 	<key>workflowMetaData</key>
