@@ -163,6 +163,7 @@ do
       elif [ "$uploadStatus" = "image_uploaded" ]
       then
         ScreenShottrURL=$(echo $metaData | python -c "import sys, json; print json.load(sys.stdin)['response']['data']['Item']['image_url']")
+        echo $ScreenShottrURL
         break
       else
         osascript -e 'display notification "ScreenShottr Upload Failed" with title "ScreenShottr"'
@@ -365,9 +366,89 @@ done
 				<dict/>
 			</dict>
 		</dict>
+		<dict>
+			<key>action</key>
+			<dict>
+				<key>AMAccepts</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<false/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.attributed-string</string>
+					</array>
+				</dict>
+				<key>AMActionVersion</key>
+				<string>1.2.1</string>
+				<key>AMApplication</key>
+				<array>
+					<string>System</string>
+				</array>
+				<key>AMParameterProperties</key>
+				<dict/>
+				<key>AMProvides</key>
+				<dict>
+					<key>Container</key>
+					<string>List</string>
+					<key>Optional</key>
+					<false/>
+					<key>Types</key>
+					<array>
+						<string>com.apple.cocoa.attributed-string</string>
+					</array>
+				</dict>
+				<key>ActionBundlePath</key>
+				<string>/System/Library/Automator/Copy to Clipboard.action</string>
+				<key>ActionName</key>
+				<string>Copy to Clipboard</string>
+				<key>ActionParameters</key>
+				<dict/>
+				<key>BundleIdentifier</key>
+				<string>com.apple.Automator.CopyToClipboard</string>
+				<key>CFBundleVersion</key>
+				<string>1.2.1</string>
+				<key>CanShowSelectedItemsWhenRun</key>
+				<true/>
+				<key>CanShowWhenRun</key>
+				<false/>
+				<key>Category</key>
+				<array>
+					<string>AMCategoryUtilities</string>
+				</array>
+				<key>Class Name</key>
+				<string>AMCopyToClipboardAction</string>
+				<key>InputUUID</key>
+				<string>C01DEE77-65B3-4F6E-80B2-8E3091E4357D</string>
+				<key>Keywords</key>
+				<array>
+					<string>Copy</string>
+				</array>
+				<key>OutputUUID</key>
+				<string>4437D96A-E5CE-4F20-8DE4-69B21286B403</string>
+				<key>UUID</key>
+				<string>4097F5D3-477E-40E2-BD5E-7661467578DF</string>
+				<key>UnlocalizedApplications</key>
+				<array>
+					<string>System</string>
+				</array>
+				<key>arguments</key>
+				<dict/>
+				<key>conversionLabel</key>
+				<integer>0</integer>
+			</dict>
+		</dict>
 	</array>
 	<key>connectors</key>
 	<dict>
+		<key>09B05C3A-E633-45AD-8042-9578BBD6EAE1</key>
+		<dict>
+			<key>from</key>
+			<string>C2D84798-4F0B-443A-B73C-1F518205981D - C2D84798-4F0B-443A-B73C-1F518205981D</string>
+			<key>to</key>
+			<string>4097F5D3-477E-40E2-BD5E-7661467578DF - 4097F5D3-477E-40E2-BD5E-7661467578DF</string>
+		</dict>
 		<key>B6EDD1BD-4BF3-48CC-B4FA-C16A84351381</key>
 		<dict>
 			<key>from</key>
